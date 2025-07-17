@@ -28,12 +28,4 @@ RUN mkdir -p /usr/share/fonts/truetype/custom && \
     fc-cache -f -v
 
 # Switch back to the non-root node user for security
-USER node```
-
-### Summary of Changes:
-
-1.  **`apk add --no-cache`**: Replaced `apt-get update`, `apt-get install`, and the cleanup commands with a single, efficient `apk` command.
-2.  **`ttf-freefont`**: Corrected the font package name from the Debian `fonts-freefont-ttf` to its Alpine equivalent, `ttf-freefont`.
-3.  **`fontconfig`**: Added this package to the install list. Your second `RUN` command uses `fc-cache`, which is part of the `fontconfig` package and is not installed by default.
-
-With this corrected `Dockerfile`, your image should build successfully, and you can proceed with the migration plan you laid out.
+USER node
