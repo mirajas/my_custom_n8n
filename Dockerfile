@@ -14,8 +14,8 @@ RUN apk add --no-cache \
     pandoc \
     texlive \
     texlive-xetex \
-    texlive-collection-latexextra \
-    texlive-collection-fontsrecommended \
+    texlive-latex-extra \
+    texlive-fonts-recommended \
     ttf-freefont \
     unzip \
     curl \
