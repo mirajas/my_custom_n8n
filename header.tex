@@ -1,13 +1,39 @@
-% header.tex
+% header.tex - NEW AND IMPROVED VERSION
 
-% --- Reduce Left and Right Margins ---
-% Use the 'geometry' package to set page margins to 1 inch on all sides.
-% You can change this value (e.g., to 0.75in).
-\usepackage{geometry}
-\geometry{margin=1in}
+% --- Use the 'book' document class for proper chapter handling ---
+\documentclass{book}
 
-% --- Center Chapter Headings ---
-% Use the 'sectsty' package to easily style section and chapter titles.
-\usepackage{sectsty}
-% This command tells LaTeX to apply the \centering command to all \chapter fonts.
-\chapterfont{\centering} 
+% --- Load necessary packages ---
+\usepackage{geometry} % For margin control
+\usepackage{sectsty}  % For styling chapter/section titles
+\usepackage{graphicx} % For handling images
+\usepackage{hyperref} % For clickable links in the TOC
+
+% --- Set Page Margins ---
+% Set the geometry for the page. 1-inch margins all around.
+\geometry{
+  paper=a4paper, % Or letterpaper
+  margin=1in
+}
+
+% --- Style Chapter Headings ---
+% This makes each chapter start on a new page (default for 'book' class)
+% and centers the title.
+\chapterfont{\centering\Huge\bfseries} % Make it Centered, Huge, and Bold
+
+% --- Style the Table of Contents ---
+% This ensures the TOC gets its own page.
+\let\oldtableofcontents\tableofcontents
+\renewcommand{\tableofcontents}{%
+  \cleardoublepage
+  \oldtableofcontents
+  \cleardoublepage
+}
+
+% --- Set link colors for a more professional look ---
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+}
