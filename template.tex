@@ -1,0 +1,57 @@
+% PANDOC CUSTOM LATEX TEMPLATE
+
+% This sets up the document class and options directly. No more conflicts.
+\documentclass[11pt, openany]{book}
+
+% --- Load all necessary packages ---
+\usepackage{geometry}
+\usepackage{sectsty}
+\usepackage{graphicx}
+\usepackage{fancyhdr}
+\usepackage[utf8]{inputenc}
+\usepackage{hyperref}
+
+% --- Set Page Geometry (Margins) ---
+\geometry{a4paper, margin=1in}
+
+% --- Custom Header/Footer Configuration ---
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[RO,LE]{\thepage}
+\renewcommand{\headrulewidth}{0pt}
+
+% --- Chapter Title Styling ---
+\chapterfont{\centering\Huge\bfseries}
+
+% --- Hyperlink Styling for TOC etc. ---
+\hypersetup{colorlinks=true, linkcolor=blue, urlcolor=cyan}
+
+% --- PANDOC METADATA INJECTION ---
+% These are special variables that Pandoc will replace.
+$if(title)$
+    \title{$title$}
+$endif$
+$if(author)$
+    \author{$author$}
+$endif$
+\date{} % No date on the title page
+
+% --- BEGIN DOCUMENT ---
+\begin{document}
+
+% --- Create the Title Page ---
+$if(title)$
+    \maketitle
+$endif$
+
+% --- Create the Table of Contents ---
+$if(toc)$
+    \tableofcontents
+$endif$
+
+% --- Inject the Main Body Content ---
+% Pandoc will place your entire converted markdown here.
+$body$
+
+% --- END DOCUMENT ---
+\end{document}
