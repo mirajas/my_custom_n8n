@@ -1,57 +1,132 @@
-% PANDOC CUSTOM LATEX TEMPLATE
-
-% This sets up the document class and options directly. No more conflicts.
+$passoptions.latex()$
+% === OUR MODIFICATION: Replace the default class with our desired book class ===
 \documentclass[11pt, openany]{book}
 
-% --- Load all necessary packages ---
+% === PANDOC'S DEFAULT PACKAGES (DO NOT CHANGE) ===
+\usepackage{xcolor}
+$if(geometry)$
+\usepackage[$for(geometry)$$geometry$$sep$,$endfor$]{geometry}
+$endif$
+\usepackage{amsmath,amssymb}
+$--
+$-- section numbering
+$--
+$if(numbersections)$
+\setcounter{secnumdepth}{$if(secnumdepth)$$secnumdepth$$else$5$endif$}
+$else$
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+$endif$
+$fonts.latex()$
+$font-settings.latex()$
+$common.latex()$
+
+% === OUR MODIFICATION: Add our custom packages and styling here ===
 \usepackage{geometry}
 \usepackage{sectsty}
-\usepackage{graphicx}
 \usepackage{fancyhdr}
-\usepackage[utf8]{inputenc}
-\usepackage{hyperref}
 
-% --- Set Page Geometry (Margins) ---
+% Set Page Geometry (Margins)
 \geometry{a4paper, margin=1in}
 
-% --- Custom Header/Footer Configuration ---
+% Custom Header/Footer Configuration
 \pagestyle{fancy}
 \fancyhf{}
 \fancyhead[RO,LE]{\thepage}
 \renewcommand{\headrulewidth}{0pt}
 
-% --- Chapter Title Styling ---
+% Chapter Title Styling
 \chapterfont{\centering\Huge\bfseries}
 
-% --- Hyperlink Styling for TOC etc. ---
-\hypersetup{colorlinks=true, linkcolor=blue, urlcolor=cyan}
+% === RESUME PANDOC'S DEFAULT TEMPLATE (DO NOT CHANGE) ===
+$for(header-includes)$
+$header-includes$
+$endfor$
+$after-header-includes.latex()$
+$hypersetup.latex()$
 
-% --- PANDOC METADATA INJECTION ---
-% These are special variables that Pandoc will replace.
 $if(title)$
-    \title{$title$}
+\title{$title$$if(thanks)$\\thanks{$thanks$}$endif$}
 $endif$
-$if(author)$
-    \author{$author$}
+$if(subtitle)$
+\usepackage{etoolbox}
+\makeatletter
+\providecommand{\subtitle}[1]{% add subtitle to \maketitle
+  \apptocmd{\@title}{\par {\large #1 \par}}{}{}
+}
+\makeatother
+\subtitle{$subtitle$}
 $endif$
-\date{} % No date on the title page
+\author{$for(author)$$author$$sep$ \and $endfor$}
+\date{$date$}
 
-% --- BEGIN DOCUMENT ---
 \begin{document}
-
-% --- Create the Title Page ---
+$if(has-frontmatter)$
+\frontmatter
+$endif$
 $if(title)$
-    \maketitle
+\maketitle
+$if(abstract)$
+\begin{abstract}
+$abstract$
+\end{abstract}
+$endif$
 $endif$
 
-% --- Create the Table of Contents ---
+$for(include-before)$
+$include-before$
+
+$endfor$
 $if(toc)$
-    \tableofcontents
+$if(toc-title)$
+\renewcommand*\contentsname{$toc-title$}
 $endif$
-
-% --- Inject the Main Body Content ---
-% Pandoc will place your entire converted markdown here.
+{
+$if(colorlinks)$
+\hypersetup{linkcolor=$if(toccolor)$$toccolor$$else$$endif$}
+$endif$
+\setcounter{tocdepth}{$toc-depth$}
+\tableofcontents
+}
+$endif$
+$if(lof)$
+\listoffigures
+$endif$
+$if(lot)$
+\listoftables
+$endif$
+$if(linestretch)$
+\setstretch{$linestretch$}
+$endif$
+$if(has-frontmatter)$
+\mainmatter
+$endif$
 $body$
 
-% --- END DOCUMENT ---
+$if(has-frontmatter)$
+\backmatter
+$endif$
+$if(nocite-ids)$
+\nocite{$for(nocite-ids)$$it$$sep$, $endfor$}
+$endif$
+$if(natbib)$
+$if(bibliography)$
+$if(biblio-title)$
+$if(has-chapters)$
+\renewcommand\bibname{$biblio-title$}
+$else$
+\renewcommand\refname{$biblio-title$}
+$endif$
+$endif$
+\bibliography{$for(bibliography)$$bibliography$$sep$,$endfor$}
+
+$endif$
+$endif$
+$if(biblatex)$
+\printbibliography$if(biblio-title)$[title=$biblio-title$]$endif$
+
+$endif$
+$for(include-after)$
+$include-after$
+
+$endfor$
 \end{document}
