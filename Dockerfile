@@ -29,7 +29,7 @@ RUN mkdir -p /usr/share/fonts/truetype/custom && \
 # =================================================================
 # The n8n execution directory is /data. We copy our files there.
 COPY style.css /data/
-COPY header.tex /data/
+COPY template.tex /data/
 # =================================================================
 
 # Switch back to the non-root node user for security
