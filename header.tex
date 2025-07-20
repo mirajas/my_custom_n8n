@@ -1,39 +1,31 @@
-% header.tex - NEW AND IMPROVED VERSION
+% header.tex - FINAL POLISHED VERSION
 
-% --- Use the 'book' document class for proper chapter handling ---
-\documentclass{book}
+\documentclass[openany]{book} % Using 'openany' to remove blank pages
 
 % --- Load necessary packages ---
-\usepackage{geometry} % For margin control
-\usepackage{sectsty}  % For styling chapter/section titles
-\usepackage{graphicx} % For handling images
-\usepackage{hyperref} % For clickable links in the TOC
+\usepackage{geometry}
+\usepackage{sectsty}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{fancyhdr} % <-- Add this for header/footer control
 
 % --- Set Page Margins ---
-% Set the geometry for the page. 1-inch margins all around.
-\geometry{
-  paper=a4paper, % Or letterpaper
-  margin=1in
-}
+\geometry{paper=a4paper, margin=1in}
 
 % --- Style Chapter Headings ---
-% This makes each chapter start on a new page (default for 'book' class)
-% and centers the title.
-\chapterfont{\centering\Huge\bfseries} % Make it Centered, Huge, and Bold
+\chapterfont{\centering\Huge\bfseries}
 
-% --- Style the Table of Contents ---
-% This ensures the TOC gets its own page.
+% --- Configure Page Headers and Footers ---
+\pagestyle{fancy} % Apply the fancy style
+\fancyhf{} % Clear all existing header and footer fields
+\fancyhead[RO,LE]{\thepage} % Put the page number on the outer edge (Right Odd, Left Even)
+\renewcommand{\headrulewidth}{0pt} % Remove the line under the header
+
+% --- TOC and Link Styling (keep as is) ---
 \let\oldtableofcontents\tableofcontents
 \renewcommand{\tableofcontents}{%
   \cleardoublepage
   \oldtableofcontents
   \cleardoublepage
 }
-
-% --- Set link colors for a more professional look ---
-\hypersetup{
-    colorlinks=true,
-    linkcolor=blue,
-    filecolor=magenta,      
-    urlcolor=cyan,
-}
+\hypersetup{colorlinks=true, linkcolor=blue, urlcolor=cyan}
