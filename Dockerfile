@@ -24,5 +24,13 @@ RUN mkdir -p /usr/share/fonts/truetype/custom && \
     curl -L -o /usr/share/fonts/truetype/custom/ComicNeue-Regular.ttf https://github.com/crozynski/comicneue/raw/master/TTF/ComicNeue-Regular.ttf && \
     fc-cache -f -v
 
+# =================================================================
+# === NEW SECTION: COPY YOUR STYLING FILES INTO THE CONTAINER ===
+# =================================================================
+# The n8n execution directory is /data. We copy our files there.
+COPY style.css /data/
+COPY header.tex /data/
+# =================================================================
+
 # Switch back to the non-root node user for security
 USER node
