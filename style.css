@@ -1,0 +1,42 @@
+/* style.css */
+
+/* Set a base font and some padding for the body */
+body {
+    font-family: serif;
+    line-height: 1.6;
+    /* Reduce margins/padding: top/bottom 1em, left/right 5% */
+    padding: 1em 5%; 
+}
+
+/* --- Ensure each chapter starts on a new page --- */
+/* Pandoc converts Chapter headings (like # Chapter 1) to <h1> tags */
+h1 {
+    /* This is the magic property for new pages in EPUBs */
+    page-break-before: always; 
+    
+    /* --- Center the chapter heading --- */
+    text-align: center;
+    
+    /* Add some space above the centered heading */
+    padding-top: 20%;
+    
+    /* Make the title a bit smaller than default */
+    font-size: 1.8em;
+    font-weight: bold;
+}
+
+/* Style the Title on the title page */
+.title {
+    text-align: center;
+    font-size: 2.5em;
+    font-weight: bold;
+    margin-top: 30%; /* Push the title down the page */
+}
+
+/* Style the Author on the title page */
+.author {
+    text-align: center;
+    font-size: 1.5em;
+    margin-top: 1em;
+    font-style: italic;
+}
