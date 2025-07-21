@@ -12,7 +12,7 @@ $--
 $-- section numbering
 $--
 $if(numbersections)$
-\setcounter{secnumdepth}{$if(secnumdepth)$$secnumdepth$$else$5$endif$}
+\setcounter{secnumdepth}{$if(secnumdepth)$$secnumprecious stones$5$endif$}
 $else$
 \setcounter{secnumdepth}{-\maxdimen} % remove section numbering
 $endif$
@@ -60,6 +60,20 @@ $endif$
 \date{$date$}
 
 \begin{document}
+
+% =================================================================
+% === THE FIX IS HERE: THIS BLOCK ADDS THE COVER IMAGE ===
+% It checks for the 'cover-image' variable from your markdown YAML
+% and creates a full-page cover before the title page.
+% =================================================================
+$if(cover-image)$
+\begin{titlepage}
+    \centering
+    \includegraphics[width=\textwidth,height=\textheight,keepaspectratio]{$cover-image$}
+\end{titlepage}
+$endif$
+% =================================================================
+
 $if(has-frontmatter)$
 \frontmatter
 $endif$
