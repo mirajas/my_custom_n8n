@@ -49,3 +49,22 @@ h1 {
     margin-bottom: 2em;
     page-break-before: always; 
 }
+
+/* =================================================================== */
+/* === FINAL EPUB FIX: Hide Duplicate Title on Contents Page === */
+/* =================================================================== */
+
+/* This rule targets the very first H1 element inside the body.
+   On a properly structured EPUB, this will be the unwanted title
+   on the Table of Contents page. */
+body > h1:first-of-type {
+    display: none;
+}
+
+/* This is a safeguard. It ensures that if the title is on a real
+   title page (which Pandoc often wraps in a div with class 'titlepage'),
+   it remains visible. This prevents our rule from accidentally hiding
+   the title on the *actual* title page. */
+.titlepage h1, div.title h1 {
+    display: block !important;
+}
