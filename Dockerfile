@@ -32,5 +32,12 @@ COPY style.css /data/
 COPY template.tex /data/
 # =================================================================
 
+# =================================================================
+# === THIS IS THE CRUCIAL FIX ===
+# Change ownership of the /data directory from 'root' to 'node'.
+# This gives the n8n application permission to write files there.
+# =================================================================
+RUN chown -R node:node /data
+
 # Switch back to the non-root node user for security
 USER node
