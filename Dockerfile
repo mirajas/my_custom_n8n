@@ -45,6 +45,7 @@ RUN mkdir -p /usr/share/fonts/truetype/custom && \
 # === STEP 4: Copy Styling Files ===
 # =================================================================
 COPY style.css /data/
+COPY storybook_style.css /data/
 COPY template.tex /data/
 # =================================================================
 
