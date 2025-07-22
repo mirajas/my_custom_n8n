@@ -1,46 +1,56 @@
-/* --- storybook_style.css --- */
+/* --- storybook_style.css (REVISED) --- */
 
-/* 1. Define the page size and remove default margins */
+/* --- FIX #1: Explicitly define the font and where to find it --- */
+@font-face {
+  font-family: "Comic Neue";
+  /* This is the exact path where your Dockerfile installs the font */
+  src: url("/usr/share/fonts/truetype/custom/ComicNeue-Regular.ttf");
+}
+
+/* --- FIX #2: Make the page containers truly fill the page --- */
 @page {
-  size: A4; /* You can change this to 'letter' or other sizes */
+  size: A4;
   margin: 0;
 }
 
-/* 2. Basic body setup */
-body {
+html, body {
+  height: 100%;
   margin: 0;
-  font-family: "Comic Neue", sans-serif; /* Uses the custom font from your Dockerfile */
+  padding: 0;
+  font-family: "Comic Neue", sans-serif; /* Apply the font globally */
 }
 
-/* 3. The main container for each page */
+/* --- FIX #3: The main container for each page --- */
 .page {
-  /* Make it fill the entire page */
-  width: 100vw;
-  height: 100vh;
+  /* Use percentages instead of vw/vh for better PDF compatibility */
+  width: 100%;
+  height: 100%;
 
-  /* --- This is the key for the background image --- */
-  background-size: cover; /* Scales the image to cover the entire area */
-  background-position: center; /* Centers the image */
-  background-repeat: no-repeat; /* Prevents the image from repeating */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 
-  /* --- Use Flexbox to position the text box --- */
   display: flex;
-  justify-content: center; /* Center the text box horizontally */
-  align-items: flex-end;   /* Push the text box to the bottom of the page */
+  justify-content: center;
+  align-items: flex-end;
 
-  /* Add some padding so the text box isn't stuck to the very edge */
   padding: 40px;
-  box-sizing: border-box; /* Ensures padding is included in the element's total width and height */
+  box-sizing: border-box;
+
+  /* This is the key fix for the page break issue. */
+  /* It forces a new page AFTER this entire element is rendered. */
+  page-break-after: always;
 }
 
-/* 4. The styled text box that sits on top of the background */
+/* 4. The styled text box (no changes needed, but font-family is reinforced) */
 .text-box {
-  background-color: rgba(255, 255, 255, 0.9); /* White background with 90% opacity */
+  background-color: rgba(255, 255, 255, 0.9);
   padding: 25px;
-  border-radius: 15px; /* Gives it nice rounded corners */
-  max-width: 80%; /* Prevents the text box from being too wide */
-  text-align: justify; /* Justifies the text for a clean, storybook look */
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25); /* Adds a subtle drop shadow */
-  font-size: 18pt; /* A good readable font size */
-  line-height: 1.5; /* Spacing between lines of text */
+  border-radius: 15px;
+  max-width: 80%;
+  text-align: justify;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
+  font-size: 18pt;
+  line-height: 1.5;
+  font-family: "Comic Neue", sans-serif;
 }
