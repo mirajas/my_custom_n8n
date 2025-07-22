@@ -44,7 +44,6 @@ RUN curl -L -o /usr/share/fonts/truetype/ComicNeue-Regular.ttf https://raw.githu
 # === STEP 4: Copy Styling Files ===
 # =================================================================
 COPY style.css /data/
-COPY storybook_style.css /data/
 COPY template.tex /data/
 COPY storybook_template.tex /data/
 # =================================================================
