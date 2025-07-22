@@ -5,11 +5,12 @@ FROM n8nio/n8n:latest
 USER root
 
 #
-# === THE FINAL, DEFINITIVE FIX ===
+# === COMBINED PACKAGE INSTALLATION ===
 #
-# This single command installs BOTH Pandoc itself AND the complete TeX Live suite.
-# This ensures all dependencies for EPUB and PDF creation are present.
-# This build will take a long time. Please be patient.
+# This single command installs:
+# 1. Your original packages (Pandoc, TeX Live, fonts, etc.)
+# 2. The new dependencies needed for WeasyPrint on Alpine Linux.
+# 3. WeasyPrint itself via pip.
 #
 RUN apk add --no-cache \
     pandoc \
@@ -17,25 +18,32 @@ RUN apk add --no-cache \
     curl \
     fontconfig \
     ttf-freefont \
-    unzip
+    unzip \
+    # ---- ADDED FOR WEASYPRINT ----
+    python3 \
+    py3-pip \
+    pango-dev \
+    cairo-dev \
+    gdk-pixbuf-dev \
+    build-base \
+# ---- INSTALL WEASYPRINT ITSELF ----
+&& pip3 install WeasyPrint
 
-# Your original custom font installation, which is good to keep.
+# Your original custom font installation (no changes needed).
 RUN mkdir -p /usr/share/fonts/truetype/custom && \
     curl -L -o /usr/share/fonts/truetype/custom/ComicNeue-Regular.ttf https://github.com/crozynski/comicneue/raw/master/TTF/ComicNeue-Regular.ttf && \
     fc-cache -f -v
 
 # =================================================================
-# === NEW SECTION: COPY YOUR STYLING FILES INTO THE CONTAINER ===
+# === COPY YOUR STYLING FILES (No changes needed) ===
 # =================================================================
-# The n8n execution directory is /data. We copy our files there.
+# Both files are kept so both workflows can use their respective templates.
 COPY style.css /data/
 COPY template.tex /data/
 # =================================================================
 
 # =================================================================
-# === THIS IS THE CRUCIAL FIX ===
-# Change ownership of the /data directory from 'root' to 'node'.
-# This gives the n8n application permission to write files there.
+# === PERMISSION FIX (No changes needed) ===
 # =================================================================
 RUN chown -R node:node /data
 
