@@ -1,0 +1,54 @@
+% template.tex
+
+\documentclass{article}
+
+% === SETUP FOR FULL-PAGE BACKGROUNDS AND MARGINS ===
+\usepackage[a4paper, margin=0pt]{geometry} % Set page size and remove all margins
+\usepackage{graphicx}                      % Required for including images
+\usepackage{wallpaper}                     % The best package for full-page backgrounds
+
+% === SETUP FOR CUSTOM FONTS (crucial for XeLaTeX engine) ===
+\usepackage{fontspec}                      % Modern package for font handling
+\setmainfont{Comic Neue}                   % Set the default font for the document
+
+% === SETUP FOR THE STYLED TEXT BOX ===
+\usepackage{xcolor}                        % For defining colors with opacity
+\usepackage[framemethod=TikZ]{mdframed}    % The best package for styled boxes
+
+% Define the style for our text box
+\mdfdefinestyle{textbox}{
+    backgroundcolor=white!90,  % White with 90% opacity
+    roundcorner=15pt,          % Rounded corners
+    innertopmargin=15pt,       % Inner padding
+    innerbottommargin=15pt,
+    innerleftmargin=15pt,
+    innerrightmargin=15pt,
+    userdefinedwidth=0.85\textwidth, % Box width is 85% of the page text width
+    align=center,              % Center the box on the page
+    linewidth=0pt,             % No border line
+}
+
+% === DOCUMENT STRUCTURE ===
+\begin{document}
+
+% Pandoc will loop through a list of 'pages' we provide
+$for(pages)$
+    % Set the background image for THIS page only
+    \ThisULCornerWallPaper{1.0}{$pages.image$}
+
+    % Create a flexible space to push the text box to the bottom
+    \vspace*{\fill}
+
+    % Create the styled text box and place the page's text inside it
+    \begin{mdframed}[style=textbox]
+    $pages.text$
+    \end{mdframed}
+
+    % Push the box up a little from the absolute bottom of the page
+    \vspace*{0.05\textheight}
+
+    % Force a new page after this one is done
+    \newpage
+$endfor$
+
+\end{document}
