@@ -37,8 +37,7 @@ RUN pip3 install --no-cache-dir --break-system-packages WeasyPrint
 #
 # Your original custom font installation and caching logic is perfect.
 #
-RUN mkdir -p /usr/share/fonts/truetype/custom && \
-    curl -L -o /usr/share/fonts/truetype/custom/ComicNeue-Regular.ttf https://github.com/crozynski/comicneue/raw/master/TTF/ComicNeue-Regular.ttf && \
+RUN curl -L -o /usr/share/fonts/truetype/ComicNeue-Regular.ttf https://raw.githubusercontent.com/google/fonts/main/ofl/comicneue/ComicNeue-Regular.ttf && \
     fc-cache -f -v
 
 # =================================================================
