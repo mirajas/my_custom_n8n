@@ -5,12 +5,9 @@ FROM n8nio/n8n:latest
 USER root
 
 #
-# === COMBINED PACKAGE INSTALLATION ===
+# === STEP 1: Install System Packages via APK ===
 #
-# This single command installs:
-# 1. Your original packages (Pandoc, TeX Live, fonts, etc.)
-# 2. The new dependencies needed for WeasyPrint on Alpine Linux.
-# 3. WeasyPrint itself via pip.
+# Install all dependencies needed for both TeX Live and WeasyPrint.
 #
 RUN apk add --no-cache \
     pandoc \
@@ -19,31 +16,40 @@ RUN apk add --no-cache \
     fontconfig \
     ttf-freefont \
     unzip \
-    # ---- ADDED FOR WEASYPRINT ----
+    # Dependencies for WeasyPrint
     python3 \
     py3-pip \
     pango-dev \
     cairo-dev \
-    gdk-pixbuf-dev \
-    build-base \
-# ---- INSTALL WEASYPRINT ITSELF ----
-&& pip3 install WeasyPrint
+gdk-pixbuf-dev \
+    build-base
 
-# Your original custom font installation (no changes needed).
+#
+# === STEP 2: Install Python Packages via PIP ===
+#
+# Now, install WeasyPrint using pip.
+# We add --break-system-packages to override the "externally-managed-environment" error.
+#
+RUN pip3 install --no-cache-dir --break-system-packages WeasyPrint
+
+#
+# === STEP 3: Install Custom Fonts and Build Font Cache ===
+#
+# Your original custom font installation and caching logic is perfect.
+#
 RUN mkdir -p /usr/share/fonts/truetype/custom && \
     curl -L -o /usr/share/fonts/truetype/custom/ComicNeue-Regular.ttf https://github.com/crozynski/comicneue/raw/master/TTF/ComicNeue-Regular.ttf && \
     fc-cache -f -v
 
 # =================================================================
-# === COPY YOUR STYLING FILES (No changes needed) ===
+# === STEP 4: Copy Styling Files ===
 # =================================================================
-# Both files are kept so both workflows can use their respective templates.
 COPY style.css /data/
 COPY template.tex /data/
 # =================================================================
 
 # =================================================================
-# === PERMISSION FIX (No changes needed) ===
+# === STEP 5: Set Correct Directory Permissions ===
 # =================================================================
 RUN chown -R node:node /data
 
