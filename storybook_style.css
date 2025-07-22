@@ -1,0 +1,46 @@
+/* --- storybook_style.css --- */
+
+/* 1. Define the page size and remove default margins */
+@page {
+  size: A4; /* You can change this to 'letter' or other sizes */
+  margin: 0;
+}
+
+/* 2. Basic body setup */
+body {
+  margin: 0;
+  font-family: "Comic Neue", sans-serif; /* Uses the custom font from your Dockerfile */
+}
+
+/* 3. The main container for each page */
+.page {
+  /* Make it fill the entire page */
+  width: 100vw;
+  height: 100vh;
+
+  /* --- This is the key for the background image --- */
+  background-size: cover; /* Scales the image to cover the entire area */
+  background-position: center; /* Centers the image */
+  background-repeat: no-repeat; /* Prevents the image from repeating */
+
+  /* --- Use Flexbox to position the text box --- */
+  display: flex;
+  justify-content: center; /* Center the text box horizontally */
+  align-items: flex-end;   /* Push the text box to the bottom of the page */
+
+  /* Add some padding so the text box isn't stuck to the very edge */
+  padding: 40px;
+  box-sizing: border-box; /* Ensures padding is included in the element's total width and height */
+}
+
+/* 4. The styled text box that sits on top of the background */
+.text-box {
+  background-color: rgba(255, 255, 255, 0.9); /* White background with 90% opacity */
+  padding: 25px;
+  border-radius: 15px; /* Gives it nice rounded corners */
+  max-width: 80%; /* Prevents the text box from being too wide */
+  text-align: justify; /* Justifies the text for a clean, storybook look */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25); /* Adds a subtle drop shadow */
+  font-size: 18pt; /* A good readable font size */
+  line-height: 1.5; /* Spacing between lines of text */
+}
