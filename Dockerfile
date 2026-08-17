@@ -2,20 +2,44 @@ FROM n8nio/n8n:1.120.4
 
 USER root
 
-# ================================================================
-# Install Qdrant community node
-# ================================================================
-RUN mkdir -p /opt/n8n-custom-nodes \
-    && cd /opt/n8n-custom-nodes \
-    && npm pack n8n-nodes-qdrant@0.2.1 \
-    && tar -xzf n8n-nodes-qdrant-0.2.1.tgz \
-    && mv package n8n-nodes-qdrant \
-    && rm n8n-nodes-qdrant-0.2.1.tgz
+# Install npm package manager dependencies required at startup
+RUN mkdir -p /opt/n8n-custom-nodes
 
-# Ensure n8n can read the custom node
-RUN chown -R node:node /opt/n8n-custom-nodes
+# Create startup script
+RUN cat > /opt/n8n-custom-nodes/start.sh <<'EOF'
+#!/bin/sh
+set -e
 
-# Point n8n directly at the custom node directory
-ENV N8N_CUSTOM_EXTENSIONS=/opt/n8n-custom-nodes/n8n-nodes-qdrant
+N8N_NODES_DIR="/home/node/.n8n/nodes"
+
+mkdir -p "$N8N_NODES_DIR"
+
+cd "$N8N_NODES_DIR"
+
+# Create package.json if it doesn't exist
+if [ ! -f package.json ]; then
+    cat > package.json <<'JSON'
+{
+  "name": "installed-nodes",
+  "private": true
+}
+JSON
+fi
+
+# Install Qdrant if it isn't already installed
+if [ ! -d "node_modules/n8n-nodes-qdrant" ]; then
+    echo "Installing n8n-nodes-qdrant@0.2.1..."
+    npm install n8n-nodes-qdrant@0.2.1
+else
+    echo "n8n-nodes-qdrant already installed."
+fi
+
+exec /docker-entrypoint.sh
+EOF
+
+RUN chmod +x /opt/n8n-custom-nodes/start.sh \
+    && chown -R node:node /opt/n8n-custom-nodes
 
 USER node
+
+ENTRYPOINT ["/opt/n8n-custom-nodes/start.sh"]
