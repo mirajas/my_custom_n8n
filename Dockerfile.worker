@@ -1,0 +1,31 @@
+# ================================================================
+# n8n Worker
+# ================================================================
+FROM n8nio/n8n:1.120.4
+
+USER root
+
+# ================================================================
+# Install Qdrant community node
+#
+# Keeping it inside the image ensures every worker has the same
+# Qdrant version as the main n8n instance.
+# ================================================================
+RUN mkdir -p /opt/n8n-custom-nodes \
+    && npm install \
+        --prefix /opt/n8n-custom-nodes \
+        n8n-nodes-qdrant@0.2.1
+
+# Make the custom node directory accessible to n8n
+RUN chown -R node:node /opt/n8n-custom-nodes
+
+# Tell n8n where the custom community nodes are located
+ENV N8N_CUSTOM_EXTENSIONS=/opt/n8n-custom-nodes/node_modules
+
+# Switch back to n8n's non-root user
+USER node
+
+# ================================================================
+# Start this container as an n8n worker
+# ================================================================
+CMD ["n8n", "worker"]
